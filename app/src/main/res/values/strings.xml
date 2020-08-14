@@ -1,0 +1,60 @@
+<resources>
+
+    <!-- App title and fragment titles -->
+    <string name="app_name">Sleep Rating</string>
+    <string name="actionBar_name">Track My Sleep Quality</string>
+    <string name="sleep_tracker_fragment">SleepTrackerFragment</string>
+    <string name="sleep_quality_fragment">SleepQualityFragment</string>
+
+    <!-- Button labels -->
+    <string name="start">Start</string>
+    <string name="stop">Stop</string>
+    <string name="clear">Clear</string>
+
+    <!-- contentDescription strings for quality icons -->
+    <string name="quality_0">Sleep Quality 0</string>
+    <string name="quality_1">Sleep Quality 1</string>
+    <string name="quality_2">Sleep Quality 2</string>
+    <string name="quality_3">Sleep Quality 3</string>
+    <string name="quality_4">Sleep Quality 4</string>
+    <string name="quality_5">Sleep Quality 5</string>
+
+    <!-- Output to TextView styled with a little HTML -->
+    <string name="title"><![CDATA[<h3>HERE IS YOUR SLEEP DATA</h3>]]></string>
+    <string name="start_time"><![CDATA[<b>Start:</b>]]></string>
+    <string name="end_time"><![CDATA[<b>End:</b>]]></string>
+    <string name="quality"><![CDATA[<b>Quality:</b>]]></string>
+    <string name="hours_slept"><![CDATA[<b>Hours:Minutes:Seconds</b>]]></string>
+
+    <!-- Sleep quality strings -->
+    <string name="how_was_hour_sleep">How was your sleep?</string>
+    <string name="zero_very_bad">Very bad</string>
+    <string name="one_poor">Poor</string>
+    <string name="two_soso">So-so</string>
+    <string name="three_ok">OK</string>
+    <string name="four_pretty_good">Pretty good</string>
+    <string name="five_excellent">Excellent!</string>
+
+    <!-- Toast to play after Clear button has been pressed -->
+    <string name="cleared_message">All your data is gone forever.</string>
+    <string name="header_text">Sleep Results</string>
+    <string name="close">Close</string>
+    <string name="minutes_length">%d minutes on %s</string>
+    <string name="hours_length">%d hours on %s</string>
+    <string name="seconds_length">%d seconds on %s</string>
+    <string name="image_description">Image quality</string>
+
+    <!-- Alarm strings -->
+    <string name="alarm_title_notification">Alarm!</string>
+    <string name="alarm_text_notification">It\'s time to rate your sleep</string>
+    <string name="no_alarm">No Alarm set</string>
+    <string name="go_back">Go Back</string>
+    <string name="open_time_picker">Time picker</string>
+    <string name="cancel_alarm">Cancel alarm</string>
+    <string name="alarm_title">Alarm</string>
+    <string name="alarm_canceled">Alarm canceled</string>
+    <string name="alarm_set">Alarm set for:</string>
+    <string name="alarm_icon">Alarm icon</string>
+    <string name="blank_item">blank</string>
+    <string name="timelapse_image">Timelapse image</string>
+</resources>
