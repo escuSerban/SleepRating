@@ -31,6 +31,12 @@ class SleepTrackerViewModel(
 
     val nights = database.getAllNights()
 
+    /** Coroutine setup variables */
+    private var _navToAlarm = MutableLiveData<Boolean>()
+    private var _showSnackbarEvent = MutableLiveData<Boolean>()
+    private val _navigateToSleepQuality = MutableLiveData<SleepNight>()
+    private val _navigateToSleepDataQuality = MutableLiveData<Long>()
+
     /**
      * If tonight has not been set, then the START button should be visible.
      */
@@ -53,22 +59,26 @@ class SleepTrackerViewModel(
     }
 
     /**
-     * We request a toast by setting this value to true.
+     * If this is true, immediately navigate to [AlarmFragment] and call [onAlarmNavigated]
      */
-    private var _showSnackbarEvent = MutableLiveData<Boolean>()
+    val navToAlarm: LiveData<Boolean>
+        get() = _navToAlarm
+
+    fun onAlarmNavigated () {
+        _navToAlarm.value = null
+    }
+
+    fun onNavToAlarm () {
+        _navToAlarm.value = true
+    }
+
 
     /**
-     * If this is true, immediately `show()` a toast and call `doneShowingSnackbar()`.
+     * If this is true, immediately `show()` a toast and call [doneShowingSnackbar]
      */
     val showSnackBarEvent: LiveData<Boolean>
         get() = _showSnackbarEvent
 
-    private val _navigateToSleepQuality = MutableLiveData<SleepNight>()
-
-    /**
-     * This will clear the toast request, so if the user rotates their phone it won't show a duplicate
-     * toast.
-     */
     fun doneShowingSnackbar() {
         _showSnackbarEvent.value = false
     }
@@ -79,16 +89,13 @@ class SleepTrackerViewModel(
     val navigateToSleepQuality: LiveData<SleepNight>
         get() = _navigateToSleepQuality
 
-    /**
-     * Call this immediately after navigating to [SleepQualityFragment]
-     * It will clear the navigation request, so if the user rotates their phone it won't navigate
-     * twice.
-     */
     fun doneNavigating() {
         _navigateToSleepQuality.value = null
     }
 
-    private val _navigateToSleepDataQuality = MutableLiveData<Long>()
+    /**
+     * If this is non-null, immediately navigate to [SleepDetailFragment] and call [onSleepDataQualityNavigated]
+     */
     val navigateToSleepDataQuality
         get() = _navigateToSleepDataQuality
 
@@ -112,7 +119,7 @@ class SleepTrackerViewModel(
 
     /**
      *  Handling the case of the stopped app or forgotten recording,
-     *  the start and end times will be the same.j
+     *  the start and end times will be the same.
      *  If the start time and end time are not the same, then we do not have an unfinished
      *  recording.
      */

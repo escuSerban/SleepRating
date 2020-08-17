@@ -1,22 +1,32 @@
 package com.example.sleeprating.alarm
 
+import android.app.AlarmManager
+import android.app.Application
+import android.app.PendingIntent
+import android.app.TimePickerDialog
+import android.content.Context
+import android.content.Intent
+import android.text.format.DateFormat
 import androidx.lifecycle.*
 import kotlinx.coroutines.*
+import java.util.*
 
-class AlarmViewModel(alarmText: String) : ViewModel() {
-
+class AlarmViewModel( application: Application) : AndroidViewModel(application) {
     /**
      * viewModelJob allows us to cancel all coroutines started by this ViewModel.
      */
     private val viewModelJob = Job()
 
+    // Required to manipulate the Alarm Manager.
+    private val activity = application
+
     /** Coroutine setup variables */
-    private val _updateAlarmtext = MutableLiveData<String>()
-    val updateAlarmText: LiveData<String>
-     get() = _updateAlarmtext
+    private val _alarmText = MutableLiveData<String>()
+    val alarmText: LiveData<String>
+        get() = _alarmText
 
     init {
-        _updateAlarmtext.value = alarmText
+        _alarmText.value = "No Alarm set"
     }
 
     private val _navigateToSleepTracker = MutableLiveData<Boolean?>()
@@ -39,20 +49,65 @@ class AlarmViewModel(alarmText: String) : ViewModel() {
         _navigateToSleepTracker.value = true
     }
 
+    /**
+     * Method used to handle the listener for TimePickerDialog
+     * and also to update alarm status text.
+     */
+     fun getTimePickerListener() =
+        TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+            val cal = Calendar.getInstance()
+            cal[Calendar.HOUR_OF_DAY] = hourOfDay
+            cal[Calendar.MINUTE] = minute
+
+            var timeText = "Alarm set for:"
+            timeText += DateFormat.format(" HH:mm", cal.time)
+            _alarmText.value = timeText
+
+            startAlarm(cal)
+        }
+
     fun donePicking() {
         _showTimePicker.value = null
+    }
+
+    /**
+     * Here we set an AlarmManager to fire a notification alarm
+     * once the desired time has been selected.
+     */
+    private fun startAlarm(c: Calendar) {
+        val alarmManager =
+            activity.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
+        val alarmIntent = Intent(activity, AlertReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(activity, 1, alarmIntent, 0)
+        if (c.before(Calendar.getInstance())) {
+            c.add(Calendar.DATE, 1)
+        }
+        alarmManager!!.setExact(AlarmManager.RTC_WAKEUP, c.timeInMillis, pendingIntent)
     }
 
     fun onAlarmSet() {
         _showTimePicker.value = true
     }
 
-    fun doneCancelling() {
-        _cancelAlarm.value = null
+    /**
+     * This implementation allows us to cancel the alarm
+     * and to update alarm status text.
+     */
+    fun cancelAlarm() {
+        val alarmManager =
+            activity.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
+        val intent = Intent(activity, AlertReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(activity, 1, intent, 0)
+        alarmManager!!.cancel(pendingIntent)
+        _alarmText.value = "Alarm cancelled"
     }
 
     fun onAlarmCancel() {
         _cancelAlarm.value = true
+    }
+
+    fun doneCancelling() {
+        _cancelAlarm.value = null
     }
 
     /**

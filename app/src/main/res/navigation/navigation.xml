@@ -65,8 +65,5 @@
         <action
             android:id="@+id/action_alarm_fragment_to_sleep_tracker_fragment"
             app:destination="@id/sleep_tracker_fragment" />
-        <argument
-            android:name="alarmText"
-            app:argType="string" />
     </fragment>
 </navigation>

@@ -33,7 +33,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@id/button_timepicker"
             android:layout_centerHorizontal="true"
-            android:text="@{String.valueOf(alarmViewModel.updateAlarmText)}"
+            android:text="@{String.valueOf(alarmViewModel.alarmText)}"
             android:textColor="@color/black"
             android:textSize="30sp"
             app:layout_constraintBottom_toBottomOf="parent"

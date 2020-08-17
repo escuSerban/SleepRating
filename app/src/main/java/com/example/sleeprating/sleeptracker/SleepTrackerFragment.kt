@@ -15,6 +15,8 @@ import com.google.android.material.snackbar.Snackbar
 
 class SleepTrackerFragment : Fragment() {
 
+    private lateinit var sleepTrackerViewModel: SleepTrackerViewModel
+
     /**
      * Called when the Fragment is ready to display content to the screen.
      * This function uses DataBindingUtil to inflate R.layout.fragment_sleep_tracker.
@@ -37,14 +39,23 @@ class SleepTrackerFragment : Fragment() {
         val viewModelFactory = SleepTrackerViewModelFactory(dataSource, application)
 
         // Getting a reference to the ViewModel associated with this fragment.
-        val sleepTrackerViewModel =
+        sleepTrackerViewModel =
             ViewModelProvider(
                 this, viewModelFactory
             ).get(SleepTrackerViewModel::class.java)
 
         binding.sleepTrackerViewModel = sleepTrackerViewModel
-
         binding.lifecycleOwner = this
+
+        sleepTrackerViewModel.navToAlarm.observe(viewLifecycleOwner, Observer {
+            if (it == true) {
+                this.findNavController().navigate(
+                    SleepTrackerFragmentDirections
+                        .actionSleepTrackerFragmentToAlarmFragment()
+                )
+                sleepTrackerViewModel.onAlarmNavigated()
+            }
+        })
 
         // Adding an Observer on the state variable for showing a Snackbar message
         // when the CLEAR button is pressed.
@@ -63,7 +74,6 @@ class SleepTrackerFragment : Fragment() {
 
         sleepTrackerViewModel.navigateToSleepQuality.observe(viewLifecycleOwner, Observer { night ->
             night?.let {
-
                 this.findNavController().navigate(
                     SleepTrackerFragmentDirections
                         .actionSleepTrackerFragmentToSleepQualityFragment(night.nightId)
@@ -118,10 +128,7 @@ class SleepTrackerFragment : Fragment() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.set_alarm -> {
-                val alarmText = resources.getString(R.string.no_alarm)
-                this.findNavController().navigate(
-                    SleepTrackerFragmentDirections
-                        .actionSleepTrackerFragmentToAlarmFragment(alarmText))
+                sleepTrackerViewModel.onNavToAlarm()
                 true
             }
             else -> super.onOptionsItemSelected(item)
