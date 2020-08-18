@@ -3,6 +3,8 @@
 
 It also allows you to set up a notification alarm, just to remind you to rate your sleep period.
 
+Here is a short video presentation.
+
 [![Alt text for your video](https://img.youtube.com/vi/8ktDTDVb_YQ/0.jpg)](https://youtu.be/8ktDTDVb_YQ)
 
 *This app demonstrates the following views and libraries:*
