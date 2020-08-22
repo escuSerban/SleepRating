@@ -7,18 +7,19 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.*
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.sleeprating.R
 import com.example.sleeprating.databinding.FragmentAlarmBinding
 import java.util.*
 
+/**
+ * Fragment that displays our Alarm options and expands the [TimePicker]
+ */
 class AlarmFragment : Fragment() {
 
     private lateinit var binding: FragmentAlarmBinding
-    private lateinit var viewModelFactory: AlarmViewModelFactory
-    private lateinit var alarmViewModel: AlarmViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -26,13 +27,13 @@ class AlarmFragment : Fragment() {
     ): View? {
 
         binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_alarm, container, false)
+            inflater, R.layout.fragment_alarm, container, false
+        )
 
-            val application = requireNotNull(this.activity).application
-            viewModelFactory = AlarmViewModelFactory(application)
-
-        // Get a reference to the ViewModel associated with this fragment.
-        alarmViewModel = ViewModelProvider(this, viewModelFactory).get(AlarmViewModel::class.java)
+        // Initialization of ViewModel associated with this fragment.
+        val alarmViewModel: AlarmViewModel by lazy {
+            ViewModelProvider(requireActivity()).get(AlarmViewModel::class.java)
+        }
 
         binding.alarmViewModel = alarmViewModel
         binding.lifecycleOwner = this
@@ -72,7 +73,6 @@ class AlarmFragment : Fragment() {
                 alarmViewModel.doneCancelling()
             }
         })
-
         return binding.root
     }
 }

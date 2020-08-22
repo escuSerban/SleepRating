@@ -7,11 +7,27 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.text.format.DateFormat
-import androidx.lifecycle.*
-import kotlinx.coroutines.*
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.SavedStateHandle
+import kotlinx.coroutines.Job
 import java.util.*
 
-class AlarmViewModel( application: Application) : AndroidViewModel(application) {
+/**
+ * ViewModel for AlarmFragment.
+ */
+class AlarmViewModel(
+    application: Application,
+    handle: SavedStateHandle
+) : AndroidViewModel(application) {
+
+    companion object{
+        private const val ALARM_KEY = "alarmText"
+    }
+
+    private val savedStateHandle = handle
+
     /**
      * viewModelJob allows us to cancel all coroutines started by this ViewModel.
      */
@@ -21,12 +37,12 @@ class AlarmViewModel( application: Application) : AndroidViewModel(application) 
     private val activity = application
 
     /** Coroutine setup variables */
-    private val _alarmText = MutableLiveData<String>()
+    private var _alarmText: MutableLiveData<String> = savedStateHandle.getLiveData(ALARM_KEY)
     val alarmText: LiveData<String>
         get() = _alarmText
 
     init {
-        _alarmText.value = "No Alarm set"
+        _alarmText.value = savedStateHandle.get<String>(ALARM_KEY) ?: "No Alarm set"
     }
 
     private val _navigateToSleepTracker = MutableLiveData<Boolean?>()

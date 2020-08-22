@@ -13,6 +13,10 @@ import com.example.sleeprating.database.SleepDatabase
 import com.example.sleeprating.databinding.FragmentSleepTrackerBinding
 import com.google.android.material.snackbar.Snackbar
 
+/**
+ * A fragment with buttons to record start and end times for sleep, which are saved in
+ * a database. Cumulative data is displayed in a RecyclerView.
+ */
 class SleepTrackerFragment : Fragment() {
 
     private lateinit var sleepTrackerViewModel: SleepTrackerViewModel
