@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="sleepDetailViewModel"
             type="com.example.sleeprating.sleepdetail.SleepDetailViewModel" />
@@ -53,6 +52,7 @@
             app:sleepDurationFormatted="@{sleepDetailViewModel.night}" />
 
         <Button
+            style="@style/SleepButtons"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"

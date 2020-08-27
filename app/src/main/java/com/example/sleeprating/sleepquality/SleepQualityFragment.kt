@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.sleeprating.R
@@ -51,7 +50,7 @@ class SleepQualityFragment : Fragment() {
         binding.sleepQualityViewModel = sleepQualityViewModel
 
         // Add an Observer to the state variable for Navigating when a Quality icon is tapped.
-        sleepQualityViewModel.navigateToSleepTracker.observe(viewLifecycleOwner, Observer {
+        sleepQualityViewModel.navigateToSleepTracker.observe(viewLifecycleOwner, {
             if (it == true) { // Observed state is true.
                 this.findNavController().navigate(
                     SleepQualityFragmentDirections.actionSleepQualityFragmentToSleepTrackerFragment()

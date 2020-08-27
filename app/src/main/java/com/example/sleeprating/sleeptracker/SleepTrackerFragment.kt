@@ -2,9 +2,9 @@ package com.example.sleeprating.sleeptracker
 
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
@@ -31,7 +31,10 @@ class SleepTrackerFragment : Fragment() {
     ): View? {
 
         val binding: FragmentSleepTrackerBinding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_sleep_tracker, container, false)
+            inflater, R.layout.fragment_sleep_tracker, container, false
+        )
+
+        (activity as AppCompatActivity?)!!.supportActionBar?.title = resources.getString(R.string.actionBar_name)
 
         // Reporting that this fragment would like to participate in populating the options menu.
         setHasOptionsMenu(true)
@@ -51,7 +54,7 @@ class SleepTrackerFragment : Fragment() {
         binding.sleepTrackerViewModel = sleepTrackerViewModel
         binding.lifecycleOwner = this
 
-        sleepTrackerViewModel.navToAlarm.observe(viewLifecycleOwner, Observer {
+        sleepTrackerViewModel.navToAlarm.observe(viewLifecycleOwner, {
             if (it == true) {
                 this.findNavController().navigate(
                     SleepTrackerFragmentDirections
@@ -61,9 +64,20 @@ class SleepTrackerFragment : Fragment() {
             }
         })
 
+        sleepTrackerViewModel.navToChart.observe(viewLifecycleOwner, {
+            val sleepNightKey = 0L
+            if (it == true) {
+                this.findNavController().navigate(
+                    SleepTrackerFragmentDirections
+                        .actionSleepTrackerFragmentToChartFragment(sleepNightKey)
+                )
+                sleepTrackerViewModel.onChartNavigated()
+            }
+        })
+
         // Adding an Observer on the state variable for showing a Snackbar message
         // when the CLEAR button is pressed.
-        sleepTrackerViewModel.showSnackBarEvent.observe(viewLifecycleOwner, Observer {
+        sleepTrackerViewModel.showSnackBarEvent.observe(viewLifecycleOwner, {
             if (it == true) { // Observed state is true.
                 Snackbar.make(
                     requireActivity().findViewById(android.R.id.content),
@@ -76,7 +90,7 @@ class SleepTrackerFragment : Fragment() {
             }
         })
 
-        sleepTrackerViewModel.navigateToSleepQuality.observe(viewLifecycleOwner, Observer { night ->
+        sleepTrackerViewModel.navigateToSleepQuality.observe(viewLifecycleOwner, { night ->
             night?.let {
                 this.findNavController().navigate(
                     SleepTrackerFragmentDirections
@@ -88,7 +102,7 @@ class SleepTrackerFragment : Fragment() {
 
         sleepTrackerViewModel.navigateToSleepDataQuality.observe(
             viewLifecycleOwner,
-            Observer { night ->
+            { night ->
                 night?.let {
 
                     this.findNavController().navigate(
@@ -115,7 +129,7 @@ class SleepTrackerFragment : Fragment() {
 
         binding.sleepList.adapter = adapter
 
-        sleepTrackerViewModel.nights.observe(viewLifecycleOwner, Observer {
+        sleepTrackerViewModel.nights.observe(viewLifecycleOwner, {
             it?.let {
                 adapter.addHeaderAndSubmitList(it)
             }
@@ -130,12 +144,9 @@ class SleepTrackerFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.set_alarm -> {
-                sleepTrackerViewModel.onNavToAlarm()
-                true
-            }
-            else -> super.onOptionsItemSelected(item)
+        when (item.itemId) {
+            R.id.set_alarm -> sleepTrackerViewModel.onNavToAlarm()
         }
+        return super.onOptionsItemSelected(item)
     }
 }

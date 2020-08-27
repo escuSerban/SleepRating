@@ -4,6 +4,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.sleeprating.database.SleepDatabaseDao
 
+/**
+ * Provides the Args key and SleepDatabaseDao to the [SleepQualityViewModel]
+ */
 class SleepQualityViewModelFactory(
     private val sleepNightKey: Long,
     private val dataSource: SleepDatabaseDao

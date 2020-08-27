@@ -19,16 +19,13 @@ import java.util.*
  */
 class AlarmFragment : Fragment() {
 
-    private lateinit var binding: FragmentAlarmBinding
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        binding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_alarm, container, false
-        )
+        val binding:  FragmentAlarmBinding = DataBindingUtil.inflate(
+            inflater, R.layout.fragment_alarm, container, false)
 
         // Initialization of ViewModel associated with this fragment.
         val alarmViewModel: AlarmViewModel by lazy {

@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
         <variable
             name="alarmViewModel"
             type="com.example.sleeprating.alarm.AlarmViewModel" />
@@ -74,7 +73,7 @@
             android:layout_below="@id/button_timepicker"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="52dp"
-            android:layout_marginEnd="16dp"
+            android:layout_marginEnd="@dimen/margin"
             android:background="@drawable/alarm_off"
             android:onClick="@{() -> alarmViewModel.onAlarmCancel()}"
             app:layout_constraintEnd_toEndOf="parent"

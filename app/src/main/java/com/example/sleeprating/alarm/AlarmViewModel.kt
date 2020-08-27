@@ -11,7 +11,10 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.SavedStateHandle
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.util.*
 
 /**
@@ -33,6 +36,11 @@ class AlarmViewModel(
      */
     private val viewModelJob = Job()
 
+    /**
+     * A [CoroutineScope] keeps track of all coroutines started by this ViewModel.
+     */
+    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
+
     // Required to manipulate the Alarm Manager.
     private val activity = application
 
@@ -42,7 +50,9 @@ class AlarmViewModel(
         get() = _alarmText
 
     init {
+        uiScope.launch {
         _alarmText.value = savedStateHandle.get<String>(ALARM_KEY) ?: "No Alarm set"
+        }
     }
 
     private val _navigateToSleepTracker = MutableLiveData<Boolean?>()
@@ -71,6 +81,7 @@ class AlarmViewModel(
      */
      fun getTimePickerListener() =
         TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute ->
+            uiScope.launch {
             val cal = Calendar.getInstance()
             cal[Calendar.HOUR_OF_DAY] = hourOfDay
             cal[Calendar.MINUTE] = minute
@@ -80,6 +91,7 @@ class AlarmViewModel(
             _alarmText.value = timeText
 
             startAlarm(cal)
+            }
         }
 
     fun donePicking() {
@@ -91,6 +103,7 @@ class AlarmViewModel(
      * once the desired time has been selected.
      */
     private fun startAlarm(c: Calendar) {
+        uiScope.launch {
         val alarmManager =
             activity.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
         val alarmIntent = Intent(activity, AlertReceiver::class.java)
@@ -99,6 +112,7 @@ class AlarmViewModel(
             c.add(Calendar.DATE, 1)
         }
         alarmManager!!.setExact(AlarmManager.RTC_WAKEUP, c.timeInMillis, pendingIntent)
+        }
     }
 
     fun onAlarmSet() {
@@ -110,12 +124,14 @@ class AlarmViewModel(
      * and to update alarm status text.
      */
     fun cancelAlarm() {
+        uiScope.launch {
         val alarmManager =
             activity.getSystemService(Context.ALARM_SERVICE) as AlarmManager?
         val intent = Intent(activity, AlertReceiver::class.java)
         val pendingIntent = PendingIntent.getBroadcast(activity, 1, intent, 0)
         alarmManager!!.cancel(pendingIntent)
         _alarmText.value = "Alarm cancelled"
+        }
     }
 
     fun onAlarmCancel() {

@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.sleeprating.database.SleepDatabaseDao
 
 /**
- * Provides the SleepDatabaseDao and context to the ViewModel.
+ * Provides the SleepDatabaseDao and  also context for [SleepTrackerViewModel]
  */
 class SleepTrackerViewModelFactory(
     private val dataSource: SleepDatabaseDao,

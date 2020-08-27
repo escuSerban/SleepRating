@@ -1,10 +1,7 @@
 package com.example.sleeprating.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 
 @Dao
 interface SleepDatabaseDao {
@@ -15,7 +12,7 @@ interface SleepDatabaseDao {
     @Update
     fun update(night: SleepNight)
 
-    @Query("SELECT * from daily_sleep_quality_table WHERE nightId = :key")
+    @Query("SELECT * FROM daily_sleep_quality_table WHERE nightId = :key")
     fun get(key: Long): SleepNight?
 
     @Query("DELETE FROM daily_sleep_quality_table")
@@ -27,6 +24,7 @@ interface SleepDatabaseDao {
     @Query("SELECT * FROM daily_sleep_quality_table ORDER BY nightId DESC LIMIT 1")
     fun getTonight(): SleepNight?
 
-    @Query("SELECT * from daily_sleep_quality_table WHERE nightId = :key")
+    @Query("SELECT * FROM daily_sleep_quality_table WHERE nightId = :key")
     fun getNightWithId(key: Long): LiveData<SleepNight>
+
 }

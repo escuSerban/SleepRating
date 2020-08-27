@@ -55,4 +55,7 @@
     <string name="blank_item">blank</string>
     <string name="timelapse_image">Timelapse image</string>
 
+    <!-- Chart strings -->
+    <string name="stats_title">Sleep 💤 Stats 📊</string>
+
 </resources>

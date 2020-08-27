@@ -1,10 +1,7 @@
 package com.example.sleeprating.sleeptracker
 
 import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.*
 import com.example.sleeprating.database.SleepDatabaseDao
 import com.example.sleeprating.database.SleepNight
 import kotlinx.coroutines.*
@@ -33,15 +30,25 @@ class SleepTrackerViewModel(
 
     /** Coroutine setup variables */
     private var _navToAlarm = MutableLiveData<Boolean>()
-    private var _showSnackbarEvent = MutableLiveData<Boolean>()
+    private var _navToChart = MutableLiveData<Boolean>()
+    private var _showSnackBarEvent = MutableLiveData<Boolean>()
     private val _navigateToSleepQuality = MutableLiveData<SleepNight>()
     private val _navigateToSleepDataQuality = MutableLiveData<Long>()
+
+
 
     /**
      * If tonight has not been set, then the START button should be visible.
      */
     val startButtonVisible = Transformations.map(tonight) {
         null == it
+    }
+
+    /**
+     * If there are any nights in the database, show chart button.
+     */
+    val chartButtonVisible = Transformations.map(nights) {
+        it?.isNotEmpty()
     }
 
     /**
@@ -59,6 +66,20 @@ class SleepTrackerViewModel(
     }
 
     /**
+     * If this is true, immediately navigate to [ChartFragment] and call [onChartNavigated]
+     */
+    val navToChart: LiveData<Boolean>
+    get() = _navToChart
+
+    fun onChartNavigated () {
+        _navToChart.value = null
+    }
+
+    fun navigateToChart () {
+        _navToChart.value = true
+    }
+
+    /**
      * If this is true, immediately navigate to [AlarmFragment] and call [onAlarmNavigated]
      */
     val navToAlarm: LiveData<Boolean>
@@ -72,15 +93,14 @@ class SleepTrackerViewModel(
         _navToAlarm.value = true
     }
 
-
     /**
      * If this is true, immediately `show()` a toast and call [doneShowingSnackbar]
      */
     val showSnackBarEvent: LiveData<Boolean>
-        get() = _showSnackbarEvent
+        get() = _showSnackBarEvent
 
     fun doneShowingSnackbar() {
-        _showSnackbarEvent.value = false
+        _showSnackBarEvent.value = false
     }
 
     /**
@@ -197,7 +217,7 @@ class SleepTrackerViewModel(
         }
 
         // Show a snackbar message, because it's friendly.
-        _showSnackbarEvent.value = true
+        _showSnackBarEvent.value = true
     }
 
     /**

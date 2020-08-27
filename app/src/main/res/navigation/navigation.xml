@@ -27,6 +27,9 @@
             app:exitAnim="@anim/fragment_fade_exit"
             app:popEnterAnim="@anim/slide_in_right"
             app:popExitAnim="@anim/fragment_fade_exit" />
+        <action
+            android:id="@+id/action_sleep_tracker_fragment_to_chartFragment"
+            app:destination="@id/chartFragment" />
     </fragment>
     <fragment
         android:id="@+id/sleep_quality_fragment"
@@ -65,5 +68,16 @@
         <action
             android:id="@+id/action_alarm_fragment_to_sleep_tracker_fragment"
             app:destination="@id/sleep_tracker_fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/chartFragment"
+        android:name="com.example.sleeprating.barChart.ChartFragment"
+        android:label="ChartFragment" >
+        <action
+            android:id="@+id/action_chartFragment_to_sleep_tracker_fragment"
+            app:destination="@id/sleep_tracker_fragment" />
+        <argument
+            android:name="sleepNightKey"
+            app:argType="long" />
     </fragment>
 </navigation>
