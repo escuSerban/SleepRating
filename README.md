@@ -1,17 +1,21 @@
-# SleepRating
-**SleepRating** is a toy App that helps you collect information about your sleep.
+# Sleep Rating
+**Sleep Rating** is an Android App that helps you collect information about your sleep.
 
-It also allows you to set up a notification alarm, just to remind you to rate your sleep period.
+It stores every sleep duration in a local dataBase; then this records can be observed and analysed in the chart📊 section.
+
+As a user, you have the option to set up a notification alarm; just to remind you to rate your sleep💤 period.
 
 Here is a short video presentation.
 
-[![Alt text for your video](https://img.youtube.com/vi/8ktDTDVb_YQ/0.jpg)](https://youtu.be/8ktDTDVb_YQ)
+[![App demo](https://img.youtube.com/vi/_6Xt2AG5Uec/0.jpg)](https://youtu.be/_6Xt2AG5Uec)
 
 *This app demonstrates the following views and libraries:*
 
 * Room database
 * DAO
 * Coroutines
+* MPAndroidChart
+* LeakCanary
 
 *It also uses and builds on the following techniques:*
 
@@ -22,3 +26,7 @@ Here is a short video presentation.
 * Observable state LiveData variables to trigger navigation
 
 <img src="mvvm.png">
+
+Thanks to LeakCanary’s knowledge of the internals of the Android Framework, **Sleep Rating** has been tested for memory leaks:
+
+<img src="leakCanary_report.png">
